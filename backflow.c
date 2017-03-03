@@ -12,7 +12,7 @@
 #define FORJ(n) for(int j=0;j<(n);j++)
 #define FORL(n) for(int l=0;l<(n);l++)
 
-#include "fragments.c"
+#include "xmalloc.c"
 
 static float evaluate_bilinear_cell(float a, float b, float c, float d,
 							float x, float y)
@@ -90,13 +90,13 @@ int main_backflow(int c, char *v[])
 	fprintf(stderr, "w h pd P = %d %d %d %d\n", w, h, pd, w*h*pd);
 
 	if (pd != 2)
-		error("flow must have two-dimensional pixels\n");
+		return fprintf(stderr,"flow must have two-dimensional pixels\n");
 
 	int iw, ih;
 	float *in = iio_read_image_float_vec(inname, &iw, &ih, &pd);
 	fprintf(stderr, "w h pd P = %d %d %d %d\n", iw, ih, pd, iw*ih*pd);
 	if (iw != w || ih != h)
-		error("flow and image size mismatch\n");
+		return fprintf(stderr,"flow and image size mismatch\n");
 	float *out = xmalloc(w*h*pd*sizeof*out);
 	fprintf(stderr, "p = %p\n", (void*)out);
 	invflow(out, flow, in, w, h, pd);

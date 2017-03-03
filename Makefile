@@ -1,16 +1,34 @@
-OMPFLAGS=-fopenmp
+# default CFLAGS to use when none is given
+CFLAGS ?= -march=native -O3
+
+# -- end of user-editable part
+
+
+# required libraries
+LDLIBS = -lpng -ljpeg -ltiff -lm
+
+
+# The following conditional statement appends "-std=gnu99" to CFLAGS when the
+# compiler does not define __STDC_VERSION__.  The idea is that many older
+# compilers are able to compile standard C when given that option.
+# This hack seems to work for all versions of gcc, clang and icc.
+CVERSION := $(shell $(CC) -dM -E - < /dev/null | grep __STDC_VERSION__)
+ifeq ($(CVERSION),)
+CFLAGS := $(CFLAGS) -std=gnu99
+endif
 
 # use OpenMP only if not clang
 ifeq ($(shell $(CC) $(CFLAGS) -v 2>&1 | grep -c "clang"), 0)
 CFLAGS := $(CFLAGS) -fopenmp
 endif
 
-tvl1flow: main.c tvl1flow_lib.c bicubic_interpolation.c mask.c zoom.c iio.o backflow.c
-	$(CC) $(CFLAGS) $(OMPFLAGS) -o tvl1flow main.c iio.o -lpng -ljpeg -ltiff -lm
-	$(CC) $(CFLAGS) $(OMPFLAGS) -o backflow backflow.c iio.o -lpng -ljpeg -ltiff -lm
 
-iio.o: iio.c
-	$(CC) $(CFLAGS) -DNDEBUG -D_GNU_SOURCE -c iio.c
+default: tvl1flow backflow
+
+tvl1flow: main.c tvl1flow_lib.c bicubic_interpolation.c mask.c zoom.c iio.o
+	$(CC) $(CFLAGS) -o $@ main.c iio.o $(LDLIBS)
+
+backflow: backflow.c iio.o
 
 clean:
-	rm -f iio.o main.o tvl1flow
+	$(RM) iio.o tvl1flow backflow

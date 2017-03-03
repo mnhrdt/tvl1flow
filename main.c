@@ -13,9 +13,9 @@
 #include <time.h>
 #include <math.h>
 
-#ifndef DISABLE_OMP
-#include <omp.h>
-#endif//DISABLE_OMP
+#ifdef _OPENMP
+#  include <omp.h>
+#endif
 
 #include "iio.h"
 
@@ -138,10 +138,10 @@ int main(int argc, char *argv[])
 				"epsilon changed to %f\n", epsilon);
 	}
 
-#ifndef DISABLE_OMP
+#ifdef _OPENMP
 	if (nproc > 0)
 		omp_set_num_threads(nproc);
-#endif//DISABLE_OMP
+#endif//_OPENMP
 
 	// read the input images
 	int    nx, ny, nx2, ny2;
