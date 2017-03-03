@@ -64,7 +64,9 @@ void zoom_out(
 	gaussian(Is, nx, ny, sigma);
 
 	// re-sample the image using bicubic interpolation
-	#pragma omp parallel for
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
 	for (int i1 = 0; i1 < nyy; i1++)
 	for (int j1 = 0; j1 < nxx; j1++)
 	{
@@ -98,7 +100,9 @@ void zoom_in(
 	const float factory = ((float)nyy / ny);
 
 	// re-sample the image using bicubic interpolation
-	#pragma omp parallel for
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
 	for (int i1 = 0; i1 < nyy; i1++)
 	for (int j1 = 0; j1 < nxx; j1++)
 	{

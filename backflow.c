@@ -25,15 +25,6 @@ static float evaluate_bilinear_cell(float a, float b, float c, float d,
 	return r;
 }
 
-static float getsample(float *fx, int w, int h, int pd, int i, int j, int l)
-{
-	if (i < 0 || i >= w || j < 0 || j >= h || l < 0 || l >= pd)
-		return 0;
-	float (*x)[w][pd] = (void*)fx;
-	return x[j][i][l];
-	//return x[(i+j*w)*pd + l];
-}
-
 static float getsamplen(float *fx, int w, int h, int pd, int i, int j, int l)
 {
 	if (i < 0 || i >= w || j < 0 || j >= h || l < 0 || l >= pd)
@@ -63,7 +54,6 @@ static void bilinear_interpolation_at(float *result,
 static void invflow(float *ou, float *flo, float *pin, int w, int h, int pd)
 {
 	float (*out)[w][pd] = (void*)ou;
-	float (*in)[w][pd] = (void*)pin;
 	float (*flow)[w][2] = (void*)flo;
 
 	FORJ(h) FORI(w) {
