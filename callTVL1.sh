@@ -9,15 +9,17 @@ if [ "$4" == "" ]; then
    echo "  Javier Sánchez Pérez, Enric Meinhardt-Llopis, and Gabriele Facciolo,"
    echo "  TV-L1 Optical Flow Estimation, Image Processing On Line, vol. 2013, pp. 137–150."
    echo "  http://dx.doi.org/10.5201/ipol.2013.26"
-   echo ""
-   echo "NOTE: this script overwrites the input files"
    exit 1
 fi
 
-a=$1
-b=$2
+a=$1.inv.tif
+b=$2.inv.tif
 disp=$3
 mask=$4
+
+# don't overwrite input files
+cp $1 $a
+cp $2 $b
 
 # ! make it invariant to illumination changes
 blur g 2 $a | plambda  - "x,l" -o $a
@@ -38,4 +40,4 @@ backflow $dl $dr $dlr
 plambda $dl $dlr "x y + split hypot 1 < 255 *" -o $mask
 plambda $dl $mask "y 0 > x[0] nan if" -o $disp
 
-rm $dl $dr $dlr
+rm $a $b $dl $dr $dlr
