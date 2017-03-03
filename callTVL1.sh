@@ -9,6 +9,8 @@ if [ "$4" == "" ]; then
    echo "  Javier Sánchez Pérez, Enric Meinhardt-Llopis, and Gabriele Facciolo,"
    echo "  TV-L1 Optical Flow Estimation, Image Processing On Line, vol. 2013, pp. 137–150."
    echo "  http://dx.doi.org/10.5201/ipol.2013.26"
+   echo ""
+   echo "NOTE: this script overwrites the input files"
    exit 1
 fi
 

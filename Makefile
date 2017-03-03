@@ -6,8 +6,8 @@ CFLAGS ?= -march=native -O3
 # required libraries
 LDLIBS = -lpng -ljpeg -ltiff -lm
 
-# configuration hacks for older compiler or those without openmp
--include config.mk
+# configuration hacks for older compilers or those without openmp
+include config.mk
 
 # rules
 default: tvl1flow backflow
