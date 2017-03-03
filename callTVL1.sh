@@ -2,7 +2,7 @@
 
 if [ "$4" == "" ]; then
    echo "Usage:"
-   echo "  $0 im1 im2 out_disp out_mask"
+   echo "  $0 im1 im2 out_disp out_mask [with_vertical_direction=1]"
    echo ""
    echo ""
    echo "  Wrapper to the TVL1 function with Left-Right consistency"
@@ -36,6 +36,11 @@ tvl1flow $a $b $dl 0 0.3 0.15 0.3 9 0.5 3 0.01 1
 tvl1flow $b $a $dr 0 0.3 0.15 0.3 9 0.5 3 0.01 1
 backflow $dl $dr $dlr
 plambda $dl $dlr "x y + split hypot 1 < 255 *" -o $mask
-plambda $dl $mask "y 0 > x[0] nan if" -o $disp
+
+if [ "$5" == "1" ]; then
+    plambda $dl $mask "y 0 > x nan if" -o $disp
+else
+    plambda $dl $mask "y 0 > x[0] nan if" -o $disp
+fi
 
 rm $dl $dr $dlr
