@@ -8,8 +8,3 @@ CVERSION := $(shell $(CC) $(CFLAGS) -dM -E - < /dev/null | grep __STDC_VERSION)
 ifeq ($(CVERSION),)
 CFLAGS := $(CFLAGS) -std=gnu99
 endif
-
-# use OpenMP only if not clang
-ifeq ($(shell $(CC) $(CFLAGS) -v 2>&1 | grep -c "clang"), 0)
-CFLAGS := $(CFLAGS) -fopenmp
-endif
